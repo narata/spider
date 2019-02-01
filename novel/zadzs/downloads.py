@@ -41,30 +41,35 @@ def run():
 
             book_urls = etree.HTML(html_class).xpath("//div[@class='book-name']/a/@href")
             for book_url in book_urls:
-                req_book = request.Request(site + book_url)
-                resp_book = request.urlopen(req_book)
-                html_book = resp_book.read().decode('utf-8')
-                lxml_book = etree.HTML(html_book)
-                book_name = lxml_book.xpath("//div[@class='f-fl']/h3/@title")[0]
-                book_download_url = site + lxml_book.xpath("//div[@class='ops']/a/@href")[0]
+                try:
+                    req_book = request.Request(site + book_url)
+                    resp_book = request.urlopen(req_book)
+                    html_book = resp_book.read().decode('utf-8')
+                    lxml_book = etree.HTML(html_book)
+                    book_name = lxml_book.xpath("//div[@class='f-fl']/h3/@title")[0].replace("/", " ")
+                    book_download_url = site + lxml_book.xpath("//div[@class='ops']/a/@href")[0]
 
-                req_book_download = request.Request(book_download_url)
-                resp_book_download = request.urlopen(req_book_download)
-                html_book_download = resp_book_download.read().decode('utf-8')
+                    req_book_download = request.Request(book_download_url)
+                    resp_book_download = request.urlopen(req_book_download)
+                    html_book_download = resp_book_download.read().decode('utf-8')
 
-                book_download_url_true = site + etree.HTML(html_book_download).xpath("//div[@class='panel-body']/a[1]/@href")[0]
+                    book_download_url_true = site + etree.HTML(html_book_download).xpath("//div[@class='panel-body']/a[1]/@href")[0]
 
-                if not os.path.exists("./data/{}/{}/".format(classification_name, book_name)):
-                    os.makedirs("./data/{}/{}/".format(classification_name, book_name))
+                    if not os.path.exists("./data/{}/{}/".format(classification_name, book_name)):
+                        os.makedirs("./data/{}/{}/".format(classification_name, book_name))
+                    else:
+                        break
 
-                req_book_text = request.Request(book_download_url_true)
-                resp_book_text = request.urlopen(req_book_text)
-                html_book_text = resp_book_text.read()
+                    req_book_text = request.Request(book_download_url_true)
+                    resp_book_text = request.urlopen(req_book_text)
+                    html_book_text = resp_book_text.read()
 
-                with open("./data/{}/{}/{}.txt".format(classification_name, book_name, book_name), "wb") as fp:
-                    fp.write(html_book_text)
+                    with open("./data/{}/{}/{}.txt".format(classification_name, book_name, book_name), "wb") as fp:
+                        fp.write(html_book_text)
 
-                print(book_download_url_true)
+                    print(book_download_url_true)
+                except:
+                    pass
             print(book_urls)
 
             if "下一页" in html_class:

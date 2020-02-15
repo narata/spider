@@ -30,7 +30,7 @@ for i in range(0, 17):
     for j in range(0, len(novel_urls)):
         if "story" in novel_urls[j]:
             try:
-                novel_url = "https://www.xbookcn.net/read/" + novel_urls[i]
+                novel_url = "https://www.xbookcn.net/read/" + novel_urls[j]
                 req_novel = request.Request(class_url, headers=headers)
                 resp_novel = request.urlopen(req)
                 html_novel = resp_novel.read().decode('gbk')
@@ -38,6 +38,6 @@ for i in range(0, 17):
                 text = test.xpath("//p/text()")
                 with open("data/{}/{}.txt".format(class_names[i], novel_names[j]), "w") as fp:
                     fp.write("".join(text))
-                print(novel_names[j])
+                print(class_names[i], novel_names[j])
             except Exception as e:
                 print(e.message)

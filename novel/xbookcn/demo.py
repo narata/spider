@@ -35,7 +35,7 @@ for i in range(0, 17):
                 resp_novel = request.urlopen(req_novel)
                 html_novel = resp_novel.read().decode('gbk')
                 test_novel = etree.HTML(html_novel)
-                text = test.xpath("//p/text()")
+                text = test_novel.xpath("//p/text()")
                 with open("data/{}/{}.txt".format(class_names[i], novel_names[j]), "w") as fp:
                     fp.write("".join(text))
                 print(class_names[i], novel_names[j])

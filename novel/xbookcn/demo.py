@@ -22,7 +22,7 @@ for i in range(0, 17):
         os.makedirs("data/{}".format(class_names[i]))
     class_url = "https://www.xbookcn.net/read/" + class_urls[i]
     req_class = request.Request(class_url, headers=headers)
-    resp_class = request.urlopen(req)
+    resp_class = request.urlopen(req_class)
     html_class = resp_class.read().decode('gbk')
     test_class = etree.HTML(html_class)
     novel_urls = test_class.xpath("//a/@href")
@@ -31,8 +31,8 @@ for i in range(0, 17):
         if "story" in novel_urls[j]:
             try:
                 novel_url = "https://www.xbookcn.net/read/" + novel_urls[j]
-                req_novel = request.Request(class_url, headers=headers)
-                resp_novel = request.urlopen(req)
+                req_novel = request.Request(novel_url, headers=headers)
+                resp_novel = request.urlopen(req_novel)
                 html_novel = resp_novel.read().decode('gbk')
                 test_novel = etree.HTML(html_novel)
                 text = test.xpath("//p/text()")

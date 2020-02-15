@@ -10,13 +10,12 @@ from lxml import etree
 import os
 import re
 
-
 headers = {
-        'User_Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0',
-        'Referer': 'https://www.douban.com/',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
-        }
+    'User_Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0',
+    'Referer': 'https://www.douban.com/',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+    'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+}
 
 
 def run():
@@ -53,12 +52,14 @@ def run():
                     resp_book_download = request.urlopen(req_book_download)
                     html_book_download = resp_book_download.read().decode('utf-8')
 
-                    book_download_url_true = site + etree.HTML(html_book_download).xpath("//div[@class='panel-body']/a[1]/@href")[0]
+                    book_download_url_true = site + etree.HTML(html_book_download).xpath(
+                        "//div[@class='panel-body']/a[1]/@href")[0]
 
-                    if not os.path.exists("./data/{}/{}/".format(classification_name, book_name)):
-                        os.makedirs("./data/{}/{}/".format(classification_name, book_name))
+                    if os.path.exists("./data/{}/{}/".format(classification_name, book_name)):
+                        if os.listdir("./data/{}/{}/".format(classification_name, book_name)):
+                            break
                     else:
-                        break
+                        os.makedirs("./data/{}/{}/".format(classification_name, book_name))
 
                     req_book_text = request.Request(book_download_url_true)
                     resp_book_text = request.urlopen(req_book_text)
@@ -73,7 +74,8 @@ def run():
             print(book_urls)
 
             if "下一页" in html_class:
-                classification_url = site + classification_urls[i] + etree.HTML(html_class).xpath("//span[@class='nums']/li/a[text()='下一页']/@href")[0]
+                classification_url = site + classification_urls[i] + \
+                                     etree.HTML(html_class).xpath("//span[@class='nums']/li/a[text()='下一页']/@href")[0]
             else:
                 classification_url = None
 

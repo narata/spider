@@ -40,4 +40,4 @@ for i in range(0, 17):
                     fp.write("".join(text))
                 print(class_names[i], novel_names[j])
             except Exception as e:
-                print(e.message)
+                print("----error------")

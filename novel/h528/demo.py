@@ -26,15 +26,19 @@ for i in range(1, 177):
     names = test.xpath("//a[@rel='bookmark']/text()")
     for j in range(0, len(urls)):
         try:
+            name = names[j].replace(' ', '')
+            name = Converter('zh-hans').convert(name)
+            if os.path.exists(path + "/{}.txt".format(name)):
+                print(i, j, name, "pass")
+                continue
             req_novel = request.Request(urls[j], headers=headers)
             resp_novel = request.urlopen(req_novel)
             html_novel = resp_novel.read().decode('utf-8')
             test_novel = etree.HTML(html_novel)
             text = test_novel.xpath("//p/text()")
-            name = names[j].replace(' ', '')
-            name = Converter('zh-hans').convert(name)
+
             with open(path + "/{}.txt".format(name), "w") as fp:
                 fp.write(Converter('zh-hans').convert("\n".join(text)))
-            print(i, name)
+            print(i, j, name)
         except UnicodeDecodeError as e:
-            print(i, urls[j])
+            print(i, j, urls[j])

@@ -4,17 +4,8 @@ from langconv import *
 import os
 import time
 
-headers = [
-    {
-        'User_Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0'
-    }, {
-        'User_Agent': 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.106 Safari/537.36'
-    }, {
-        'User_Agent': 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.106 Safari/537.36'
-    }, {
-        'User_Agent': 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.106 Safari/537.36'
-    }
-]
+user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_{0}) AppleWebKit/53{0}.36 (KHTML, like Gecko) Chrome/80.{0}.3987.106 Safari/53{}.36'
+
 path = "data/人妻熟女"
 
 if not os.path.exists(path):
@@ -23,7 +14,7 @@ if not os.path.exists(path):
 for i in range(1, 177):
     url = "http://w2.h528.com/post/category/%e4%ba%ba%e5%a6%bb%e7%86%9f%e5%a5%b3/page/" + str(i)
     print(url)
-    req = request.Request(url, headers=headers[j % 2])
+    req = request.Request(url, headers={'User_Agent': user_agent.format(i)})
     resp = request.urlopen(req)
     html = resp.read().decode('utf-8')
     test = etree.HTML(html)
@@ -36,7 +27,7 @@ for i in range(1, 177):
             if os.path.exists(path + "/{}.txt".format(name)):
                 print(i, j, name, "pass")
                 continue
-            req_novel = request.Request(urls[j], headers=headers[j % 2])
+            req_novel = request.Request(urls[j], headers={'User_Agent': user_agent.format(j)})
             resp_novel = request.urlopen(req_novel)
             html_novel = resp_novel.read().decode('utf-8')
             test_novel = etree.HTML(html_novel)

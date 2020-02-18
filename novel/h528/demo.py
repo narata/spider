@@ -34,4 +34,4 @@ for i in range(1, 177):
                 fp.write("\n".join(text))
             print(name)
         except Exception as e:
-            print("----error------")
+            print(urls[j])

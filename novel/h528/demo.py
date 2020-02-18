@@ -30,7 +30,7 @@ for i in range(1, 177):
             html_novel = resp_novel.read().decode('utf-8')
             test_novel = etree.HTML(html_novel)
             text = test_novel.xpath("//p/text()")
-            name = names[j].replace('(', "").replace(')', '').replace('@', '').replace('（', '').replace(' ', '')
+            name = names[j].replace(' ', '')
             name = Converter('zh-hans').convert(name)
             with open(path + "/{}.txt".format(name), "w") as fp:
                 fp.write(Converter('zh-hans').convert("\n".join(text)))

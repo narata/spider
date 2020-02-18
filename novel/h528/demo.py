@@ -23,11 +23,15 @@ for i in range(1, 177):
     urls = test.xpath("//a[@rel='bookmark']/@href")
     names = test.xpath("//a[@rel='bookmark']/text()")
     for j in range(0, len(urls)):
-        req_novel = request.Request(urls[j], headers=headers)
-        resp_novel = request.urlopen(req_novel)
-        html_novel = resp_novel.read().decode('utf-8')
-        test_novel = etree.HTML(html_novel)
-        text = test_novel.xpath("//p/text()")
-        with open(path + "/{}.txt".format(names[j]), "w") as fp:
-            fp.write("".join(text))
-        print(names[j])
+        try:
+            req_novel = request.Request(urls[j], headers=headers)
+            resp_novel = request.urlopen(req_novel)
+            html_novel = resp_novel.read().decode('utf-8')
+            test_novel = etree.HTML(html_novel)
+            text = test_novel.xpath("//p/text()")
+            name = names[j].replace('(', "-").replace(')', '-')
+            with open(path + "/{}.txt".format(name), "w") as fp:
+                fp.write("\n".join(text))
+            print(name)
+        except Exception as e:
+            print("----error------")

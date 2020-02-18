@@ -4,12 +4,17 @@ from langconv import *
 import os
 import time
 
-headers = {
-    'User_Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0',
-    'Referer': 'http://w2.h528.com/post/category/%e4%ba%ba%e5%a6%bb%e7%86%9f%e5%a5%b3',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-    'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
-}
+headers = [
+    {
+        'User_Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0'
+    }, {
+        'User_Agent': 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.106 Safari/537.36'
+    }, {
+        'User_Agent': 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.106 Safari/537.36'
+    }, {
+        'User_Agent': 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.106 Safari/537.36'
+    }
+]
 path = "data/人妻熟女"
 
 if not os.path.exists(path):
@@ -18,7 +23,7 @@ if not os.path.exists(path):
 for i in range(1, 177):
     url = "http://w2.h528.com/post/category/%e4%ba%ba%e5%a6%bb%e7%86%9f%e5%a5%b3/page/" + str(i)
     print(url)
-    req = request.Request(url, headers=headers)
+    req = request.Request(url, headers=headers[j % 2])
     resp = request.urlopen(req)
     html = resp.read().decode('utf-8')
     test = etree.HTML(html)
@@ -31,14 +36,14 @@ for i in range(1, 177):
             if os.path.exists(path + "/{}.txt".format(name)):
                 print(i, j, name, "pass")
                 continue
-            req_novel = request.Request(urls[j], headers=headers)
+            req_novel = request.Request(urls[j], headers=headers[j % 2])
             resp_novel = request.urlopen(req_novel)
             html_novel = resp_novel.read().decode('utf-8')
             test_novel = etree.HTML(html_novel)
             text = test_novel.xpath("//p/text()")
-
             with open(path + "/{}.txt".format(name), "w") as fp:
                 fp.write(Converter('zh-hans').convert("\n".join(text)))
             print(i, j, name)
+            time.sleep(2)
         except UnicodeDecodeError as e:
             print(i, j, urls[j])

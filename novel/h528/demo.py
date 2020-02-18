@@ -17,6 +17,7 @@ if not os.path.exists(path):
 
 for i in range(1, 177):
     url = "http://w2.h528.com/post/category/%e4%ba%ba%e5%a6%bb%e7%86%9f%e5%a5%b3/page/" + str(i)
+    print(url)
     req = request.Request(url, headers=headers)
     resp = request.urlopen(req)
     html = resp.read().decode('utf-8')
@@ -34,7 +35,6 @@ for i in range(1, 177):
             name = Converter('zh-hans').convert(name)
             with open(path + "/{}.txt".format(name), "w") as fp:
                 fp.write(Converter('zh-hans').convert("\n".join(text)))
-            print(name)
-            time.sleep(2)
-        except Exception as e:
-            print(urls[j])
+            print(i, name)
+        except UnicodeDecodeError as e:
+            print(i, urls[j])

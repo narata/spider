@@ -4,7 +4,7 @@ from langconv import *
 import os
 import time
 
-user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_{0}) AppleWebKit/53{0}.36 (KHTML, like Gecko) Chrome/80.{0}.3987.106 Safari/53{}.36'
+user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_{0}) AppleWebKit/53{0}.36 (KHTML, like Gecko) Chrome/80.{0}.3987.106 Safari/53{0}.36'
 
 path = "data/人妻熟女"
 

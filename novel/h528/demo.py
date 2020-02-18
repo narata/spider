@@ -13,6 +13,7 @@ headers = {
 url = "http://w2.h528.com/post/category/%e4%ba%ba%e5%a6%bb%e7%86%9f%e5%a5%b3"
 req = request.Request(url, headers=headers)
 resp = request.urlopen(req)
-html = resp.read().decode('gbk')
+html = resp.read().decode('utf-8')
 test = etree.HTML(html)
-print(html)
+urls = test.xpath("//div[@class='post']/a/@href")
+print(urls)

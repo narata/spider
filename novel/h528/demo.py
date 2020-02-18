@@ -1,7 +1,8 @@
 from urllib import request
 from lxml import etree
-import re
+from langconv import *
 import os
+import time
 
 headers = {
     'User_Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0',
@@ -29,9 +30,11 @@ for i in range(1, 177):
             html_novel = resp_novel.read().decode('utf-8')
             test_novel = etree.HTML(html_novel)
             text = test_novel.xpath("//p/text()")
-            name = names[j].replace('(', "-").replace(')', '-').replace('@', '')
+            name = names[j].replace('(', "").replace(')', '').replace('@', '').replace('（', '').replace(' ', '')
+            name = Converter('zh-hans').convert(name)
             with open(path + "/{}.txt".format(name), "w") as fp:
-                fp.write("\n".join(text))
+                fp.write(Converter('zh-hans').convert("\n".join(text)))
             print(name)
+            time.sleep(2)
         except Exception as e:
             print(urls[j])

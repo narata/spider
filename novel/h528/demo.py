@@ -1,4 +1,4 @@
-from urllib import request
+import requests
 from lxml import etree
 from langconv import *
 from fake_useragent import UserAgent
@@ -14,12 +14,13 @@ ua = UserAgent()
 if not os.path.exists(path):
     os.makedirs(path)
 
-for i in range(1, 177):
+for i in range(24, 177):
     url = "http://w2.h528.com/post/category/%e4%ba%ba%e5%a6%bb%e7%86%9f%e5%a5%b3/page/" + str(i)
     print(url)
-    req = request.Request(url, headers={'User_Agent': ua.random})
-    resp = request.urlopen(req)
-    html = resp.read().decode('utf-8')
+    headers = {'User_Agent': ua.random}
+    print(headers)
+    resp = requests.get(url, headers=headers)
+    html = resp.content.decode('utf-8')
     test = etree.HTML(html)
     urls = test.xpath("//a[@rel='bookmark']/@href")
     names = test.xpath("//a[@rel='bookmark']/text()")
@@ -30,9 +31,10 @@ for i in range(1, 177):
             if os.path.exists(path + "/{}.txt".format(name)):
                 print(i, j, name, "pass")
                 continue
-            req_novel = request.Request(urls[j], headers={'User_Agent': ua.random})
-            resp_novel = request.urlopen(req_novel)
-            html_novel = resp_novel.read().decode('utf-8')
+            headers = {'User_Agent': ua.random}
+            print(headers)
+            resp = requests.get(urls[j], headers=headers)
+            html_novel = resp.content.decode('utf-8')
             test_novel = etree.HTML(html_novel)
             text = test_novel.xpath("//p/text()")
             with open(path + "/{}.txt".format(name), "w") as fp:
